@@ -1,3 +1,5 @@
+**English** · [Português](README.pt-BR.md) · [Español](README.es.md) · [简体中文](README.zh-CN.md)
+
 # Rojo Manager
 
 A small desktop app to run and supervise multiple local [Rojo](https://rojo.space) `serve`
