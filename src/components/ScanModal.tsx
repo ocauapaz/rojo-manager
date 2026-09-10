@@ -106,7 +106,7 @@ export default function ScanModal({ onClose, onAdd }: Props) {
                       onClick={() => add(d)}
                       disabled={done}
                     >
-                      {done ? "Added ✓" : "Add"}
+                      {done ? "Added" : "Add"}
                     </button>
                   </div>
                 );

@@ -75,7 +75,7 @@ export default function ProjectForm({ initial, existingPorts, onCancel, onSave }
         <form onSubmit={submit} className="form">
           <label className="field">
             <span>Display name</span>
-            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="My Game — Main place" autoFocus />
+            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Main place" autoFocus />
           </label>
 
           <label className="field">

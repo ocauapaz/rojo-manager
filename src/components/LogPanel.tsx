@@ -27,8 +27,7 @@ export default function LogPanel({ lines }: { lines: LogLine[] }) {
   if (lines.length === 0) {
     return (
       <div className="log-empty">
-        <span className="log-empty-mark">/_</span>
-        <p>No output yet. Start the serve to stream rojo's logs here.</p>
+        <p>No output yet. Start the serve to stream its logs here.</p>
       </div>
     );
   }

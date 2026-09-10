@@ -130,15 +130,18 @@ export default function App() {
     <div className="app">
       <aside className="sidebar">
         <div className="brand">
-          <img className="brand-logo" src="/rojo-logo.png" alt="Rojo" draggable={false} />
-          <span className="brand-caption">
-            Manager · {runningCount > 0 ? <em>{runningCount} serving</em> : "idle"}
-          </span>
+          <img className="brand-logo" src="/rojo-logo.png" alt="" draggable={false} />
+          <span>Rojo Manager</span>
         </div>
 
         <div className="side-actions">
           <button className="btn primary block" onClick={openNew}>+ Add project</button>
-          <button className="btn ghost block" onClick={() => setScanOpen(true)}>Scan a folder…</button>
+          <button className="btn ghost block" onClick={() => setScanOpen(true)}>Scan folder…</button>
+        </div>
+
+        <div className="list-head">
+          <span>Projects</span>
+          {runningCount > 0 && <em>{runningCount} serving</em>}
         </div>
 
         <nav className="proj-list" aria-label="Projects">
@@ -170,7 +173,7 @@ export default function App() {
 
         <div className="side-foot">
           <button className="btn ghost block" onClick={() => api.stopAll()} disabled={runningCount === 0}>
-            Stop all serves
+            Stop all
           </button>
           <ThemeToggle />
         </div>
@@ -244,18 +247,20 @@ function ProjectDetail({
     <>
       <header className="detail-head">
         <div className="detail-title">
-          <span className={`dot ${status} lg`} />
           <h1>{project.name}</h1>
-          <span className={`badge ${status}`}>{STATUS_LABEL[status]}</span>
+          <span className={`status ${status}`}>
+            <span className={`dot ${status}`} />
+            {STATUS_LABEL[status]}
+          </span>
         </div>
         <div className="detail-actions">
           {running ? (
             <button className="btn stop" onClick={onStop}>
-              ■ Stop
+              Stop
             </button>
           ) : (
             <button className="btn primary" onClick={onStart}>
-              ▶ Start serve
+              Start
             </button>
           )}
           <button className="btn ghost" onClick={onEdit} disabled={running}>
@@ -273,11 +278,11 @@ function ProjectDetail({
         </div>
       )}
 
-      <section className="meta-grid">
-        <Meta label="Port" value={`:${project.port}`} mono />
-        <Meta label="Project file" value={project.projectFile} mono />
-        <Meta label="Folder" value={project.folder} mono wide />
-        {project.args.length > 0 && <Meta label="Extra args" value={project.args.join(" ")} mono wide />}
+      <section className="meta-list">
+        <Meta label="Port" value={String(project.port)} />
+        <Meta label="Project file" value={project.projectFile} />
+        <Meta label="Folder" value={project.folder} />
+        {project.args.length > 0 && <Meta label="Extra args" value={project.args.join(" ")} />}
       </section>
 
       <section className="log-section">
@@ -291,11 +296,13 @@ function ProjectDetail({
   );
 }
 
-function Meta({ label, value, mono, wide }: { label: string; value: string; mono?: boolean; wide?: boolean }) {
+function Meta({ label, value }: { label: string; value: string }) {
   return (
-    <div className={`meta ${wide ? "wide" : ""}`}>
+    <div className="meta">
       <span className="meta-label">{label}</span>
-      <span className={`meta-value ${mono ? "mono" : ""}`}>{value}</span>
+      <span className="meta-value" title={value}>
+        {value}
+      </span>
     </div>
   );
 }
@@ -303,22 +310,20 @@ function Meta({ label, value, mono, wide }: { label: string; value: string; mono
 function EmptyState({ onAdd, onScan, hasProjects }: { onAdd: () => void; onScan: () => void; hasProjects: boolean }) {
   return (
     <div className="empty">
-      <div className="empty-logo-wrap">
-        <img className="empty-logo" src="/rojo-logo.png" alt="Rojo Manager" draggable={false} />
-      </div>
+      <img className="empty-logo" src="/rojo-logo.png" alt="" draggable={false} />
       <h1>{hasProjects ? "Select a project" : "No projects yet"}</h1>
       <p>
         {hasProjects
           ? "Pick a project from the sidebar to see its status and stream its logs."
-          : "Add a Rojo project to start managing local serve processes — each runs independently on its own port."}
+          : "Each project runs its own rojo serve on its own port. Add one by hand or scan a folder."}
       </p>
       {!hasProjects && (
         <div className="empty-actions">
           <button className="btn primary" onClick={onAdd}>
-            + Add your first project
+            + Add project
           </button>
           <button className="btn ghost" onClick={onScan}>
-            Scan a folder for projects
+            Scan folder…
           </button>
         </div>
       )}

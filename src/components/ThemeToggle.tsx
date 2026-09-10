@@ -13,10 +13,10 @@ export function applyStoredTheme() {
   document.documentElement.dataset.theme = resolve(mode);
 }
 
-const OPTS: { mode: Mode; label: string; icon: string }[] = [
-  { mode: "light", label: "Light", icon: "☀" },
-  { mode: "dark", label: "Dark", icon: "☾" },
-  { mode: "system", label: "System", icon: "◑" },
+const OPTS: { mode: Mode; label: string }[] = [
+  { mode: "light", label: "Light" },
+  { mode: "dark", label: "Dark" },
+  { mode: "system", label: "Auto" },
 ];
 
 export default function ThemeToggle() {
@@ -40,9 +40,8 @@ export default function ThemeToggle() {
           className={`theme-opt ${mode === o.mode ? "active" : ""}`}
           onClick={() => setMode(o.mode)}
           aria-pressed={mode === o.mode}
-          title={o.label}
         >
-          <span aria-hidden>{o.icon}</span>
+          {o.label}
         </button>
       ))}
     </div>
