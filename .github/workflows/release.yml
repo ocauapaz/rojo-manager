@@ -41,3 +41,39 @@ jobs:
           tagName: ${{ github.ref_name }}
           releaseName: Rojo Manager ${{ github.ref_name }}
           releaseDraft: true
+
+  # Terminal UI binaries, attached to the draft release the job above created.
+  cli:
+    needs: build
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows-latest
+            bin: rojom.exe
+            asset: rojom-windows-x64.exe
+          - platform: macos-latest
+            bin: rojom
+            asset: rojom-macos-arm64
+          - platform: ubuntu-22.04
+            bin: rojom
+            asset: rojom-linux-x64
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - run: cargo build --release --manifest-path cli/Cargo.toml
+
+      - run: cp cli/target/release/${{ matrix.bin }} ${{ matrix.asset }}
+        shell: bash
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          draft: true
+          files: ${{ matrix.asset }}

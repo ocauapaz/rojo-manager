@@ -6,7 +6,7 @@
 进程——每个项目一个，带有各自的实时日志，并常驻系统托盘，所以关闭窗口不会中断你的 serve。
 
 使用 **Tauri 2 + React + TypeScript** 构建。暖色调的 Claude 风格界面，支持浅色/深色/跟随
-系统三种主题。
+系统三种主题。同时提供终端版本 [`rojom`](#终端界面-rojom)。
 
 ## 功能
 
@@ -51,6 +51,31 @@ npm run tauri build
 会在 `src-tauri/target/release/` 生成无控制台窗口的可执行文件和安装包（安装包位于
 `src-tauri/target/release/bundle/`）。安装它（或直接运行 `.exe`），然后像普通应用一样打开。
 
+## 终端界面（`rojom`）
+
+更喜欢终端？`rojom` 是同一个管理器的全屏 TUI 版本：带状态指示的项目列表、彩色实时日志、
+一键启动/停止，以及扫描目录来添加项目。它读写的 `projects.json` 与桌面应用相同，两者
+始终保持同步。
+
+从[最新发布](https://github.com/ocauapaz/rojo-manager/releases/latest)下载对应系统的 `rojom`，或从源码编译——只需要 Rust 工具链（无需
+Node，也无需 Tauri 系统依赖）：
+
+```bash
+cargo install --git https://github.com/ocauapaz/rojo-manager rojo-manager-cli
+rojom
+```
+
+| 按键 | 操作 |
+| --- | --- |
+| `↑` `↓` | 选择项目 |
+| `Enter` | 启动 / 停止所选项目 |
+| `S` / `X` | 全部启动 / 全部停止 |
+| `a` | 添加项目——扫描目录中的 `*.project.json` |
+| `d` | 删除所选项目（需确认） |
+| `r` / `c` | 从磁盘重新加载列表 / 清空日志 |
+| `PgUp` `PgDn` | 滚动日志 |
+| `q` | 退出（停止所有 serve） |
+
 ## 开发
 
 ```bash
@@ -63,6 +88,8 @@ npm run tauri dev      # 带热重载的开发窗口
 | 路径 | 用途 |
 | --- | --- |
 | `src-tauri/src/lib.rs` | 进程管理、持久化、托盘、生命周期 |
+| `src-tauri/src/core.rs` | 两个前端共用：项目模型、`projects.json`、目录扫描 |
+| `cli/` | `rojom` 终端界面（ratatui）——同一份项目，不依赖 Tauri |
 | `src/App.tsx` | 主面板：侧边列表 + 项目详情 + 日志控制台 |
 | `src/components/` | `ProjectForm`、`LogPanel`、`ThemeToggle` |
 | `src/api.ts` / `src/types.ts` | Tauri 命令封装 + 共享类型 |
