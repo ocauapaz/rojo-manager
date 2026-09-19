@@ -6,7 +6,7 @@ A small desktop app to run and supervise multiple local [Rojo](https://rojo.spac
 processes — one per project — from a single window, with live per-project logs and a
 system-tray presence so closing the window never stops your serves.
 
-Built with **Tauri 2 + React + TypeScript**. Warm "Claude-like" UI with Light/Dark/System themes.
+Built with **Tauri 2 + React + TypeScript**. Warm "Claude-like" UI with Light/Dark/System themes. Also ships as a terminal UI, [`rojom`](#terminal-ui-rojom).
 
 ## What it does
 
@@ -52,6 +52,31 @@ Outputs a console-free executable and installer under
 `src-tauri/target/release/` (the bundle/installer is in `src-tauri/target/release/bundle/`).
 Install it (or run the `.exe` directly) and launch it like any other app.
 
+## Terminal UI (`rojom`)
+
+Prefer the terminal? `rojom` is the same manager as a full-screen TUI: project list with
+status dots, live colour-coded logs, one-key start/stop, and a folder scan to add projects.
+It reads and writes the same `projects.json` as the desktop app, so the two stay in sync.
+
+Download `rojom` for your OS from the [latest release](https://github.com/ocauapaz/rojo-manager/releases/latest), or build it from source —
+only the Rust toolchain is needed (no Node, no Tauri system dependencies):
+
+```bash
+cargo install --git https://github.com/ocauapaz/rojo-manager rojo-manager-cli
+rojom
+```
+
+| Key | Action |
+| --- | --- |
+| `↑` `↓` | Select a project |
+| `Enter` | Start / stop the selected project |
+| `S` / `X` | Start all / stop all |
+| `a` | Add projects — scans a folder for `*.project.json` |
+| `d` | Delete the selected project (asks to confirm) |
+| `r` / `c` | Reload the list from disk / clear the log |
+| `PgUp` `PgDn` | Scroll the log |
+| `q` | Quit (stops every serve) |
+
 ## Develop
 
 ```bash
@@ -64,6 +89,8 @@ npm run tauri dev      # hot-reloading dev window
 | Path | Purpose |
 | --- | --- |
 | `src-tauri/src/lib.rs` | Process management, persistence, tray, lifecycle |
+| `src-tauri/src/core.rs` | Shared by both front-ends: project model, `projects.json`, folder scan |
+| `cli/` | `rojom` terminal UI (ratatui) — same projects, no Tauri |
 | `src/App.tsx` | Dashboard: sidebar list + project detail + log console |
 | `src/components/` | `ProjectForm`, `LogPanel`, `ThemeToggle` |
 | `src/api.ts` / `src/types.ts` | Tauri command wrappers + shared types |

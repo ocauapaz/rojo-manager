@@ -8,7 +8,7 @@ proyecto y presencia en la bandeja del sistema, de modo que cerrar la ventana nu
 tus serves.
 
 Hecha con **Tauri 2 + React + TypeScript**. Interfaz cálida al estilo Claude, con temas
-Claro/Oscuro/Sistema.
+Claro/Oscuro/Sistema. También existe como interfaz de terminal, [`rojom`](#interfaz-de-terminal-rojom).
 
 ## Qué hace
 
@@ -59,6 +59,32 @@ Produce un ejecutable sin consola y un instalador en `src-tauri/target/release/`
 bundle/instalador queda en `src-tauri/target/release/bundle/`). Instálalo (o ejecuta el
 `.exe` directamente) y ábrelo como cualquier otra app.
 
+## Interfaz de terminal (`rojom`)
+
+¿Prefieres la terminal? `rojom` es el mismo gestor como una TUI a pantalla completa: lista de
+proyectos con indicador de estado, logs en vivo con colores, iniciar/detener con una tecla y
+escaneo de carpetas para añadir proyectos. Lee y escribe el mismo `projects.json` que la app
+de escritorio, así que ambos se mantienen sincronizados.
+
+Descarga `rojom` para tu SO desde la [última release](https://github.com/ocauapaz/rojo-manager/releases/latest) o compílalo desde el código —
+solo necesitas la toolchain de Rust (sin Node, sin dependencias de sistema de Tauri):
+
+```bash
+cargo install --git https://github.com/ocauapaz/rojo-manager rojo-manager-cli
+rojom
+```
+
+| Tecla | Acción |
+| --- | --- |
+| `↑` `↓` | Seleccionar proyecto |
+| `Enter` | Iniciar / detener el proyecto seleccionado |
+| `S` / `X` | Iniciar todos / detener todos |
+| `a` | Añadir proyectos — escanea una carpeta buscando `*.project.json` |
+| `d` | Eliminar el proyecto seleccionado (pide confirmación) |
+| `r` / `c` | Recargar la lista desde disco / limpiar el log |
+| `PgUp` `PgDn` | Desplazar el log |
+| `q` | Salir (detiene todos los serves) |
+
 ## Desarrollo
 
 ```bash
@@ -71,6 +97,8 @@ npm run tauri dev      # ventana de desarrollo con recarga en caliente
 | Ruta | Propósito |
 | --- | --- |
 | `src-tauri/src/lib.rs` | Gestión de procesos, persistencia, bandeja, ciclo de vida |
+| `src-tauri/src/core.rs` | Compartido por ambos front-ends: modelo de proyecto, `projects.json`, escaneo de carpetas |
+| `cli/` | TUI `rojom` (ratatui) — mismos proyectos, sin Tauri |
 | `src/App.tsx` | Panel: lista lateral + detalle del proyecto + consola de logs |
 | `src/components/` | `ProjectForm`, `LogPanel`, `ThemeToggle` |
 | `src/api.ts` / `src/types.ts` | Envoltorios de comandos Tauri + tipos compartidos |
